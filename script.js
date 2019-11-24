@@ -5,39 +5,33 @@ $(document).ready(function() {
   
     // get times from moment
     const now = moment().format('MMMM Do YYYY');
-  
-    // commented out for test in non-standard hours
     let nowHour24 = moment().format('H');
     let nowHour12 = moment().format('h');
   
-    // set times for tesitng after hours
+    // set times for testing after hours
     if (test) {
       nowHour24 = 13;
       nowHour12 = 1;
     }
-  
     let $dateHeading = $('#navbar-subtitle');
     $dateHeading.text(now);
-    
-    // using font awesome icon https://fontawesome.com/license
-    // change description here - none
-    const saveIcon = "./images/save-regular.svg"; 
+    const saveBtn = "./images/save-regular.svg"; 
   
-    // Get stored todos from localStorage
+    // Store in localStorage
     // Parsing the JSON string to an object
     let storedPlans = JSON.parse(localStorage.getItem("storedPlans"));
   
     if (test) { console.log(storedPlans); }
   
-    // If plans were retrieved from localStorage, update the plan array to it
+    // If plans were retrieved from localStorage, update the plan array
     if (storedPlans !== null) {
       planTextArr = storedPlans;
     } else {
-      planTextArr = new Array(9);
-      planTextArr[4] = "Picnic lunch outside";
-    }
+      planTextArr = new Array();
+      planTextArr = "input";
+    } 
   
-    if (test) { console.log("full array of plan text",planTextArr); }
+    //if (test) { console.log("full array of plan text",planTextArr); }
   
     // set variable referencing planner element
     let $plannerDiv = $('#plannerContainer');
@@ -90,7 +84,7 @@ $(document).ready(function() {
       // build row components
       let $dailyPlanSpn = $('<input>');
   
-      $dailyPlanSpn.attr('id',`input-${index}`);
+      $dailyPlanSpn.attr('id',`input-$[index]`);
       $dailyPlanSpn.attr('hour-index',index);
       $dailyPlanSpn.attr('type','text');
       $dailyPlanSpn.attr('class','dailyPlan');
@@ -112,14 +106,13 @@ $(document).ready(function() {
       $col1SaveDiv.addClass('col-md-1');
   
       let $saveBtn = $('<i>');
-      $saveBtn.attr('id',`saveid-${index}`);
+      $saveBtn.attr('id','saveid-${index}');
       $saveBtn.attr('save-id',index);
       $saveBtn.attr('class',"far fa-save saveIcon");
       
       // add col width and row component to row
       $rowDiv.append($col1SaveDiv);
       $col1SaveDiv.append($saveBtn);
-      // STOP building save portion of row
   
       // set row color based on time
       updateRowColor($rowDiv, hour);
@@ -142,12 +135,12 @@ $(document).ready(function() {
         $hourRow.css("background-color","lightgreen")
       } else {
         if (test) { console.log("eqaul"); }
-        $hourRow.css("background-color","lightpurple")
+        $hourRow.css("background-color","pink")
       }
     };
   
     // saves to local storage
-    // conclick function to listen for user clicks on plan area
+    // onclick function to listen for user clicks on plan area
     $(document).on('click','i', function(event) {
       event.preventDefault();  
   
@@ -164,9 +157,6 @@ $(document).ready(function() {
       if (test) { console.log('value ', $value); }
       if (test) { console.log('index ', $index); }
       if (test) { console.log('click pta after '+ planTextArr); }
-  
-      // remove shawdow pulse class
-      $(`#saveid-${$index}`).removeClass('shadowPulse');
       localStorage.setItem("storedPlans", JSON.stringify(planTextArr));
     });  
     
@@ -179,8 +169,5 @@ $(document).ready(function() {
       // neeed to check for save button
   
       let i = $(this).attr('hour-index');
-  
-      // add shawdow pulse class
-      $(`#saveid-${i}`).addClass('shadowPulse');
     });
   });
